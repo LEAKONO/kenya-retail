@@ -1,4 +1,3 @@
-cat > .gitignore <<'EOF'
 # secrets
 .env
 *.p8
@@ -17,6 +16,3 @@ data/raw/*
 # editor / OS
 .vscode/
 .DS_Store
-EOF
-
-touch data/raw/.gitkeep
