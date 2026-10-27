@@ -1,0 +1,22 @@
+cat > .gitignore <<'EOF'
+# secrets
+.env
+*.p8
+*.pem
+
+# python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# generated data (rebuild with generator/generate_kenya_retail.py)
+data/raw/*
+!data/raw/.gitkeep
+
+# editor / OS
+.vscode/
+.DS_Store
+EOF
+
+touch data/raw/.gitkeep
