@@ -16,3 +16,8 @@ data/raw/*
 # editor / OS
 .vscode/
 .DS_Store
+
+# dbt
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
