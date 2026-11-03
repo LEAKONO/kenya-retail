@@ -1,0 +1,28 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Raw tables loaded by the Python ingestion pipeline, unchanged copies of the source CSVs.
+    database: KENYA_RETAIL
+    schema: RAW
+    tables:
+      - name: categories
+        description: One row per product category.
+      - name: products
+        description: One row per sellable product.
+      - name: stores
+        description: One row per shop location.
+      - name: customers
+        description: One row per customer record.
+      - name: customers_updates
+        description: Later changes to customer details, such as a change of county.
+      - name: orders
+        description: One row per order (the header).
+      - name: order_items
+        description: One row per product on an order (the detail).
+      - name: payments
+        description: One row per payment attempt, including failed ones.
+      - name: deliveries
+        description: One row per delivery of an online order.
+      - name: reviews
+        description: One row per customer review of an order.
