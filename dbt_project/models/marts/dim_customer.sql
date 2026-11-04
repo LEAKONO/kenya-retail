@@ -10,6 +10,21 @@ updates as (
 
 ),
 
+person_map as (
+
+    select
+        customer_id,
+        coalesce(
+            case
+                when phone is not null
+                then min(customer_id) over (partition by full_name, phone)
+            end,
+            customer_id
+        ) as person_id
+    from customers
+
+),
+
 all_versions as (
 
     select
@@ -53,9 +68,31 @@ walk_in as (
 
 combined as (
 
-    select * from versions
+    select
+        versions.customer_id,
+        person_map.person_id,
+        versions.full_name,
+        versions.phone,
+        versions.county,
+        versions.segment,
+        versions.valid_from,
+        versions.valid_to
+    from versions
+    join person_map
+        on versions.customer_id = person_map.customer_id
+
     union all
-    select * from walk_in
+
+    select
+        customer_id,
+        'WALK-IN' as person_id,
+        full_name,
+        phone,
+        county,
+        segment,
+        valid_from,
+        valid_to
+    from walk_in
 
 )
 
