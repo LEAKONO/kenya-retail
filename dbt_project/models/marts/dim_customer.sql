@@ -96,4 +96,15 @@ combined as (
 
 )
 
-select * from combined
+select
+    md5(concat_ws('|', customer_id, cast(valid_from as varchar)))   as customer_key,
+    customer_id,
+    person_id,
+    full_name,
+    phone,
+    county,
+    segment,
+    valid_from,
+    valid_to,
+    (valid_to is null)                                              as is_current
+from combined
