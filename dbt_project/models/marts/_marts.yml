@@ -1,0 +1,84 @@
+version: 2
+
+models:
+  - name: dim_product
+    description: One row per product, with its category name attached.
+    columns:
+      - name: product_key
+        data_tests: [unique, not_null]
+      - name: product_id
+        data_tests: [unique, not_null]
+      - name: category_name
+        data_tests: [not_null]
+
+  - name: dim_store
+    description: One row per shop.
+    columns:
+      - name: store_key
+        data_tests: [unique, not_null]
+      - name: store_id
+        data_tests: [unique, not_null]
+
+  - name: dim_date
+    description: One row per calendar day from 2022 to 2026.
+    columns:
+      - name: date_key
+        data_tests: [unique, not_null]
+      - name: full_date
+        data_tests: [unique]
+
+  - name: dim_customer
+    description: One row per version of a customer (type 2), plus a walk-in row.
+    columns:
+      - name: customer_key
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests: [not_null]
+      - name: person_id
+        data_tests: [not_null]
+      - name: is_current
+        data_tests: [not_null]
+
+  - name: fact_sales
+    description: One row per order line.
+    columns:
+      - name: order_item_id
+        data_tests: [unique, not_null]
+      - name: date_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: customer_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_key
+      - name: product_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product')
+                field: product_key
+      - name: store_key
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_store')
+                field: store_key
+      - name: order_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['completed', 'delivered', 'cancelled', 'refunded', 'returned']
+      - name: channel
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['in_store', 'online']
